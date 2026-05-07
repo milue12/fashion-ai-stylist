@@ -54,7 +54,7 @@ def find_weight(patterns: List[str], start: Path) -> Optional[Path]:
 def _extract_state_dict(obj: dict) -> dict:
     if isinstance(obj, dict):
         for k in ["state_dict","model","net","module"]:
-            if k in obj and isinstance(obj[k], dict):
+            if k in obj 및 isinstance(obj[k], dict):
                 return _extract_state_dict(obj[k])
     return obj if isinstance(obj, dict) else {}
 
@@ -73,11 +73,11 @@ def _infer_h4_head_spec(cls_sd: dict, emb_dim: int):
             use_layernorm = True
             for idx in [1,2,3,4]:
                 w_lin = cls_sd.get(f"{idx}.weight", None)
-                if w_lin is not None and getattr(w_lin, "ndim", None) == 2 and w_lin.shape[1] == emb_dim:
+                if w_lin is not None 및 getattr(w_lin, "ndim", None) == 2 및 w_lin.shape[1] == emb_dim:
                     hidden_dim = w_lin.shape[0]; break
-        elif getattr(w0,"ndim",None) == 2 and w0.shape[1] == emb_dim:
+        elif getattr(w0,"ndim",None) == 2 및 w0.shape[1] == emb_dim:
             hidden_dim = w0.shape[0]
-    if w3 is not None and getattr(w3,"ndim",None) == 2:
+    if w3 is not None 및 getattr(w3,"ndim",None) == 2:
         out_dim = w3.shape[0]
     return use_layernorm, hidden_dim, out_dim
 
@@ -94,7 +94,7 @@ def _safe_load_head(module: nn.Module, sd_full: dict, prefix: str = ""):
     sd = _extract_state_dict(sd_full)
     if prefix: sd = _strip_prefix_keys(sd, prefix)
     cur = module.state_dict()
-    compat = {k: v for k, v in sd.items() if k in cur and cur[k].shape == v.shape}
+    compat = {k: v for k, v in sd.items() if k in cur 및 cur[k].shape == v.shape}
     module.load_state_dict(compat, strict=False)
     skipped = [k for k in sd if k not in compat]
     if skipped: print(f"[SAFE-LOAD] skipped {len(skipped)} keys for {module.__class__.__name__} (shape mismatch).")
@@ -112,7 +112,7 @@ class H4ContextHead(nn.Module):
         super().__init__()
         self.clip_vision_model = clip_model.visual
         for p in self.clip_vision_model.parameters(): p.requires_grad = False
-        self.classifier_head = classifier_head or nn.Sequential(
+        self.classifier_head = classifier_head 또는 nn.Sequential(
             nn.Linear(emb_dim,256), nn.ReLU(), nn.Dropout(0.5), nn.Linear(256,2)
         )
     def forward(self, images):
@@ -158,21 +158,21 @@ print("\n--- [AI 모듈] 모델 가중치 로드 시작 ---")
 
 # --- H4 (원본) ---
 h4_path = find_weight(["h4_best_*.pt","h4*.pt","h4*.pth"], start=CKPT_DIR)
-if not h4_path or not h4_path.exists():
+if not h4_path 또는 not h4_path.exists():
     raise FileNotFoundError("H4 weights not found under ./checkpoints")
 raw = torch.load(h4_path, map_location="cpu")
 sd_full = _extract_state_dict(raw)
 sd_cls  = _strip_prefix_keys(sd_full, "classifier_head.")
 use_ln, hid_dim, out_dim = _infer_h4_head_spec(sd_cls, EMB_DIM); print("[H4] inferred spec")
 h4_head = _build_h4_head_from_spec(EMB_DIM, use_ln, hid_dim, out_dim)
-h4_model = H4ContextHead(classifier_head=h4_head).to(VISION_DEVICE).eval()
+h4_model = H4ContextHead(classifier_head=h4_head).까지(VISION_DEVICE).eval()
 _safe_load_head(h4_model.classifier_head, sd_full, "classifier_head.")
 print(f"Trained H4 loaded: {h4_path}")
 
 # --- H1 (원본) ---
-H1_MODEL = H1AestheticHead().to(VISION_DEVICE).eval()
+H1_MODEL = H1AestheticHead().까지(VISION_DEVICE).eval()
 h1_path = find_weight(["h1_best_*.pt","h1*.pt","h1*.pth"], start=CKPT_DIR)
-if h1_path and h1_path.exists():
+if h1_path 및 h1_path.exists():
     st = torch.load(h1_path, map_location="cpu")
     _safe_load_head(H1_MODEL.aesthetic_head, st, "head.")
     print(f"Trained H1 loaded: {h1_path}")
@@ -180,9 +180,9 @@ else:
     H1_MODEL = None; print("[Warning] H1 weights not found.")
 
 # --- H3 (새 모델) ---
-H3_MODEL = H3ItemClassifier(num_classes=N_H3_CLASSES).to(VISION_DEVICE).eval()
+H3_MODEL = H3ItemClassifier(num_classes=N_H3_CLASSES).까지(VISION_DEVICE).eval()
 h3_path = find_weight(["h3_mixed_best_*.pt"], start=MIXED_CKPT_DIR)
-if h3_path and h3_path.exists():
+if h3_path 및 h3_path.exists():
     st = torch.load(h3_path, map_location="cpu")
     _safe_load_head(H3_MODEL.classifier_head, st, "")
     print(f"Trained H3 (Mixed) loaded: {h3_path}")
@@ -190,9 +190,9 @@ else:
     H3_MODEL = None; print("[Warning] H3 (Mixed) weights not found.")
 
 # --- H2 (원본) ---
-H2_MODEL = H2OutfitHead().to(VISION_DEVICE).eval()
+H2_MODEL = H2OutfitHead().까지(VISION_DEVICE).eval()
 h2_path = find_weight(["h2_best_*.pt","h2*.pt","h2*.pth"], start=CKPT_DIR)
-if h2_path and h2_path.exists():
+if h2_path 및 h2_path.exists():
     st = torch.load(h2_path, map_location="cpu")
     _safe_load_head(H2_MODEL.refiner_head, st, "projection_head.")
     print(f"Trained H2 loaded: {h2_path}")
@@ -210,7 +210,7 @@ YOLO_MODEL = YOLO(yolo_weights)
 print(f"Trained YOLO (Mixed) loaded: {yolo_weights}")
 
 
-print(f"✅ [AI 모듈] 모든 모델 로드 완료.")
+print(f"[AI 모듈] 모든 모델 로드 완료.")
 
 # --- 4. 헬퍼 함수 정의 ---
 
@@ -242,8 +242,8 @@ def _safe_mkdir(path: str):
 
 @torch.inference_mode()
 def extract_feature(image: Image.Image, text_candidates: List[str]) -> str:
-    image_input = preprocess(image).unsqueeze(0).to(DEVICE)
-    text_inputs = open_clip.tokenize(text_candidates).to(DEVICE)
+    image_input = preprocess(image).unsqueeze(0).까지(DEVICE)
+    text_inputs = open_clip.tokenize(text_candidates).까지(DEVICE)
     img_f = clip_model.encode_image(image_input)
     txt_f = clip_model.encode_text(text_inputs)
     img_f /= img_f.norm(dim=-1, keepdim=True)
@@ -253,8 +253,8 @@ def extract_feature(image: Image.Image, text_candidates: List[str]) -> str:
 
 @torch.inference_mode()
 def extract_topk_features(image: Image.Image, text_candidates: List[str], top_k: int = 3, min_prob: float = 0.12):
-    image_input = preprocess(image).unsqueeze(0).to(DEVICE)
-    text_inputs = open_clip.tokenize(text_candidates).to(DEVICE)
+    image_input = preprocess(image).unsqueeze(0).까지(DEVICE)
+    text_inputs = open_clip.tokenize(text_candidates).까지(DEVICE)
     img_f = clip_model.encode_image(image_input)
     txt_f = clip_model.encode_text(text_inputs)
     img_f = img_f / img_f.norm(dim=-1, keepdim=True)
@@ -270,17 +270,17 @@ def extract_topk_features(image: Image.Image, text_candidates: List[str], top_k:
 
 @torch.inference_mode()
 def _extract_item_attributes(item_image: Image.Image) -> (str, str):
-    image_input = preprocess(item_image).unsqueeze(0).to(DEVICE)
+    image_input = preprocess(item_image).unsqueeze(0).까지(DEVICE)
     img_f = clip_model.encode_image(image_input)
     img_f /= img_f.norm(dim=-1, keepdim=True)
     
-    text_colors = open_clip.tokenize(COLORS).to(DEVICE)
+    text_colors = open_clip.tokenize(COLORS).까지(DEVICE)
     txt_f_colors = clip_model.encode_text(text_colors)
     txt_f_colors /= txt_f_colors.norm(dim=-1, keepdim=True)
     sim_colors = (100.0 * img_f @ txt_f_colors.T).softmax(dim=-1)
     color_label = COLORS[int(sim_colors.argmax().item())]
     
-    text_materials = open_clip.tokenize(MATERIALS).to(DEVICE)
+    text_materials = open_clip.tokenize(MATERIALS).까지(DEVICE)
     txt_f_materials = clip_model.encode_text(text_materials)
     txt_f_materials /= txt_f_materials.norm(dim=-1, keepdim=True)
     sim_materials = (100.0 * img_f @ txt_f_materials.T).softmax(dim=-1)
@@ -291,7 +291,7 @@ def _extract_item_attributes(item_image: Image.Image) -> (str, str):
 @torch.inference_mode()
 def _infer_context_with_h4(image: Image.Image) -> Dict[str, Any]:
     H4_CLASS_NAMES = ["shop", "consumer"]
-    x = preprocess(image).unsqueeze(0).to(DEVICE)
+    x = preprocess(image).unsqueeze(0).까지(DEVICE)
     logits = h4_model(x)
     if logits.shape[-1] == 1:
         p1 = torch.sigmoid(logits).item(); probs = [1 - p1, p1]
@@ -328,12 +328,12 @@ def _detect_yolo(image_path: str, save_dir: str) -> List[DetectedItem]:
 @torch.inference_mode()
 def _classify_items_h3_and_refine_h2(items: List[DetectedItem]) -> None:
     if not items: return
-    print(f"Running H3, H2, and Item-Attributes extraction for {len(items)} items...")
+    print(f"Running H3, H2, 그리고 Item-Attributes extraction for {len(items)} items...")
     for it in items:
         if not it.crop_path: continue
         try:
             crop_img = Image.open(it.crop_path).convert("RGB")
-            x = preprocess(crop_img).unsqueeze(0).to(DEVICE)
+            x = preprocess(crop_img).unsqueeze(0).까지(DEVICE)
             
             if H3_MODEL:
                 logits = H3_MODEL(x); pred = int(logits.argmax().item())
@@ -355,7 +355,7 @@ def _score_aesthetic_h1(image: Image.Image) -> Optional[float]:
     if H1_MODEL is None:
         print("H1 model not loaded..."); return None
     try:
-        x = preprocess(image).unsqueeze(0).to(DEVICE)
+        x = preprocess(image).unsqueeze(0).까지(DEVICE)
         score_1_to_10 = H1_MODEL(x)
         return float(score_1_to_10.squeeze().item())
     except Exception as e:
@@ -456,7 +456,7 @@ def run_ai_analysis(image_path: str, workdir: str = "./_e2e_runs") -> Dict[str, 
     print("--- E2E Analysis Function Defined (Top-K + Item-Color-Material-Aware) ---")
     return result
 
-print("✅ 'Cell 5' (AI 분석 모듈) 정의 완료.")
+print("'Cell 5' (AI 분석 모듈) 정의 완료.")
 
 # --- 6. (테스트용) 이 파일이 직접 실행될 때만 작동 ---
 if __name__ == "__main__":
@@ -486,5 +486,5 @@ if __name__ == "__main__":
     ai_analysis_json = run_ai_analysis(test_img_str)
     
     # 4. 결과 출력
-    print("\n--- ✨ 최종 AI 분석 JSON (LLM 제외) ✨ ---")
+    print("\n---최종 AI 분석 JSON (LLM 제외)---")
     print(json.dumps(ai_analysis_json, ensure_ascii=False, indent=2))
