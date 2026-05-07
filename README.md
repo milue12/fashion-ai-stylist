@@ -74,3 +74,30 @@ pip install -r requirements.txt
 4. `notebooks/Final_model.ipynb` 파일을 엽니다.
 5. 노트북 셀을 순서대로 실행합니다.
 6. 이미지 입력 후 패션 분석 결과를 확인합니다.
+
+## 주요 파일 설명
+
+### notebooks
+
+- `Final_model.ipynb`  
+  최종 모델 노트북입니다.
+
+### src
+
+- `chat_api.py`  
+  사용자 입력 또는 채팅 기반 응답 처리를 위한 코드입니다.
+
+- `fashion_model.py`  
+  패션 이미지 분석 모델 관련 코드입니다.
+
+- `llm_config.py`  
+  LLM 설정 관련 코드입니다.
+
+- `main_api.py`  
+  API 실행 및 연결을 위한 코드입니다.
+
+- `models.py`  
+  모델 구조 또는 데이터 처리에 필요한 클래스 정의 코드입니다.
+
+- `utils.py`  
+  프로젝트 전반에서 사용하는 보조 함수 코드입니다.
