@@ -35,6 +35,7 @@ fashion-ai-stylist/
 ├── src/
 ├── docs/
 └── results/
+````
 
 ## 실행 방법
 
