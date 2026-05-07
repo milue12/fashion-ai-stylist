@@ -78,14 +78,14 @@ def get_fashion_advice_from_ai_analysis(ai_analysis: AIAnalysis) -> FashionAdvic
     # [FIX] LLM에 전달할 (이름, 색상, 재질) 딕셔너리 리스트 생성
     items_for_llm = []
     for it in ai_analysis.items:
-        name = it.get('h3_category') or it.get('category')
+        name = it.get('h3_category') 또는 it.get('category')
         
         color = "unknown"
-        if it.get('colors_topk') and len(it['colors_topk']) > 0:
+        if it.get('colors_topk') 및 len(it['colors_topk']) > 0:
             color = it['colors_topk'][0].get('label', 'unknown')
         
         material = "unknown"
-        if it.get('materials_topk') and len(it['materials_topk']) > 0:
+        if it.get('materials_topk') 및 len(it['materials_topk']) > 0:
             material = it['materials_topk'][0].get('label', 'unknown')
             
         items_for_llm.append({"item": name, "color": color, "material": material})
@@ -150,7 +150,7 @@ if __name__ == "__main__":
         fashion_advice = get_fashion_advice_from_ai_analysis(mock_ai_analysis)
         
         # 4. 결과 출력
-        print("\n--- ✨ 최종 LLM 조언 JSON ✨ ---")
+        print("\n---최종 LLM 조언 JSON---")
         print(fashion_advice.model_dump_json(indent=2, ensure_ascii=False))
         
     except Exception as e:
