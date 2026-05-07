@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Google Colab / Notebook outputs
+*.nbconvert.ipynb
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Environment variables / API keys
+.env
+*.env
+
+# Dataset files
+data/
+datasets/
+*.csv
+*.xlsx
+*.json
+
+# Model files
+models/
+*.h5
+*.pkl
+*.pt
+*.pth
+*.onnx
+
+# Result files
+outputs/
+results/
+
+# OS files
+.DS_Store
+Thumbs.db
