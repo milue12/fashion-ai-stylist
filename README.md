@@ -30,11 +30,18 @@ Fashion AI Stylist는 사용자의 전신 착장 이미지를 분석하여 패�
 ```text
 fashion-ai-stylist/
 ├── README.md
+├── .gitignore
+├── requirements.txt
 ├── notebooks/
-├── data/
+│   └── Final_model.ipynb
 ├── src/
-├── docs/
-└── results/
+│   ├── chat_api.py
+│   ├── fashion_model.py
+│   ├── llm_config.py
+│   ├── main_api.py
+│   ├── models.py
+│   └── utils.py
+└── docs/
 ````
 
 ## 실행 방법
