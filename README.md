@@ -55,6 +55,17 @@ fashion-ai-stylist/
 - OpenCV
 - YOLO
 
+### 라이브러리 설치
+
+프로젝트 실행에 필요한 라이브러리는 `requirements.txt` 파일에 정리되어 있습니다.
+
+터미널 또는 Anaconda Prompt에서 다음 명령어를 실행합니다.
+
+
+```bash
+pip install -r requirements.txt
+````
+
 ### 실행 순서
 
 1. 저장소를 로컬 환경에 다운로드합니다.
