@@ -35,3 +35,30 @@ fashion-ai-stylist/
 ├── src/
 ├── docs/
 └── results/
+
+## 실행 방법
+
+본 프로젝트의 주요 실험 및 모델 실행 코드는 `notebooks` 폴더 안의 Jupyter Notebook 파일에서 확인할 수 있습니다.
+
+### 주요 노트북
+
+- [Final_model.ipynb](notebooks/Final_model.ipynb)
+
+### 실행 환경
+
+본 프로젝트는 로컬 환경의 Jupyter Notebook을 기준으로 실행되었습니다.
+
+- Python
+- Jupyter Notebook
+- PyTorch
+- OpenCV
+- YOLO
+
+### 실행 순서
+
+1. 저장소를 로컬 환경에 다운로드합니다.
+2. 필요한 라이브러리를 설치합니다.
+3. Jupyter Notebook을 실행합니다.
+4. `notebooks/Final_model.ipynb` 파일을 엽니다.
+5. 노트북 셀을 순서대로 실행합니다.
+6. 이미지 입력 후 패션 분석 결과를 확인합니다.
