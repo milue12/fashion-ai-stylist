@@ -86,8 +86,11 @@ pip install -r requirements.txt
 
 ### notebooks
 
-- `Final_model.ipynb`  
-  최종 모델 노트북입니다.
+- `Data_Prep_Mixed.ipynb` : 데이터 전처리 및 준비 과정
+- `object_detection.ipynb` : 객체 탐지 모델 실험
+- `H1+H2_final.ipynb` : H1, H2 통합 실험
+- `H3+4.ipynb` : H3, H4 모델 실험
+- `Final_model.ipynb` : 최종 모델 실행 노트북
 
 ### src
 
